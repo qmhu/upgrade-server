@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.eshop.swagger;
+package com.my.swagger;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;

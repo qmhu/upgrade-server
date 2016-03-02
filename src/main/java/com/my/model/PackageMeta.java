@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.Map;
 
-public class UpgradeMeta implements Serializable {
+public class PackageMeta implements Serializable {
 
     private static final long serialVersionUID = -7568613177795333322L;
 

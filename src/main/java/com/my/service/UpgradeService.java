@@ -15,8 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.my.exception.BusinessException;
-import com.my.model.UpgradeMeta;
+import com.my.model.PackageMeta;
 
 /**
  * @author I311862
@@ -28,13 +27,13 @@ public class UpgradeService {
     private static final Logger logger = LoggerFactory.getLogger(UpgradeService.class);
 
 
-    public UpgradeMeta getUpgradeMeta() {
-        return null;
+    public PackageMeta getUpgradeMeta() {
+    	PackageMeta upgradeMeta = new PackageMeta();
+        return upgradeMeta;
     }
     
-    private 
 
-    public Attachment createAttachment(MultipartFile file, String name, String type, int size, String description) {
+    /*public Attachment createAttachment(MultipartFile file, String name, String type, int size, String description) {
 
         // 1.store file in tmp dir
         if (!file.isEmpty()) {
@@ -67,6 +66,6 @@ public class UpgradeService {
         // 2.save attachement to DB
 
         return null;
-    }
+    }*/
 
 }

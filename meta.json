@@ -1,0 +1,30 @@
+{
+	"plans":[
+				{
+					"client_version":"2.0.0",
+					"include_files":["xxx.dll","data"]		
+				},
+				{
+					"client_version":"2.0.0",
+					"include_files":["xxx.dll","data"]	
+				},
+				{
+					"client_version":"2.0.0",
+					"include_files":["data"]	
+				}
+	],
+	"files":[
+				{
+					"name": "xxx.dll",
+					"src": "lib/xxx.dll"
+					"desc": "lib/xxx.dll",
+					"type": "file"
+				},
+				{
+					"name": "data",
+					"src": "dat"
+					"desc": "dat"
+					"type": "dir"
+				}
+	]
+}

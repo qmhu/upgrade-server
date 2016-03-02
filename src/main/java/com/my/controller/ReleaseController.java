@@ -16,23 +16,24 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.my.model.PackageMeta;
+import com.my.model.ReleaseInfo;
 import com.my.service.UpgradeService;
 
 /**
- * Handles requests for the Upgrade service.
+ * Handles requests for the Release service.
  */
-@Api(value = "/upgrade")
+@Api(value = "/release")
 @Controller
-public class UpgradeController {
+public class ReleaseController {
 
-    private static final Logger logger = LoggerFactory.getLogger(UpgradeController.class);
+    private static final Logger logger = LoggerFactory.getLogger(ReleaseController.class);
 
     @Autowired
     private UpgradeService upgradeService;
-
+    
     @RequestMapping(value = "/upgrade/info", method = RequestMethod.GET)
-    public @ResponseBody PackageMeta getUpgradeInfo(@RequestParam("name") String name) {
-        logger.info("Start getUpgradeMeta. name=" + name);
+    public @ResponseBody ReleaseInfo getReleaseInfo() {
+        logger.info("Start getReleaseInfo.");
         return null;
     }
 
