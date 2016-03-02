@@ -74,13 +74,13 @@ public class ReleaseService {
                 while (iteratorFile.hasNext()) {
                 	files.add(iteratorFile.next());
                 }
-     
+                
+                validateReleaseInfo(releaseInfo);
+                
+                this.releaseInfo = releaseInfo;
             } catch (Exception e) {
             	logger.error("Meet exception during load ReleaseInfo from meta.json, exception is:" + e.getMessage());
             }
-            
-            
-        	
     	}
     	
         return this.releaseInfo;
