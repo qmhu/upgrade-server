@@ -16,14 +16,14 @@
 	"files":[
 				{
 					"name": "xxx.dll",
-					"src": "lib/xxx.dll"
+					"src": "lib/xxx.dll",
 					"desc": "lib/xxx.dll",
 					"type": "file"
 				},
 				{
 					"name": "data",
-					"src": "dat"
-					"desc": "dat"
+					"src": "dat",
+					"desc": "dat",
 					"type": "dir"
 				}
 	]

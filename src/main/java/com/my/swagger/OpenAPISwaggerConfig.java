@@ -20,7 +20,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
  */
 @Configuration
 @PropertySource("classpath:/META-INF/swagger/swagger.properties")
-@ComponentScan("com.eshop.controller")
+@ComponentScan("com.my.controller")
 @EnableWebMvc
 @EnableSwagger2
 public class OpenAPISwaggerConfig {
@@ -31,8 +31,8 @@ public class OpenAPISwaggerConfig {
     }
 
     private ApiInfo apiInfo() {
-        return new ApiInfo("SAP Anywhere ESHOP Open API", "SAP Anywhere ESHOP Open API Documentations", "1.0",
-                "http://www.sap.com/terms", "eshop_openapi@sap.com", "SAP License", "http://www.sap.com/license");
+        return new ApiInfo("Upgrade Server API", "API Documentations", "1.0",
+                "http://www.sap.com/terms", "", "", "");
     }
 
 }

@@ -1,5 +1,6 @@
 package com.my.controller;
 
+import com.my.service.ReleaseService;
 import io.swagger.annotations.Api;
 
 import java.util.List;
@@ -29,12 +30,12 @@ public class ReleaseController {
     private static final Logger logger = LoggerFactory.getLogger(ReleaseController.class);
 
     @Autowired
-    private UpgradeService upgradeService;
+    private ReleaseService releaseService;
     
-    @RequestMapping(value = "/upgrade/info", method = RequestMethod.GET)
+    @RequestMapping(value = "/release/info", method = RequestMethod.GET)
     public @ResponseBody ReleaseInfo getReleaseInfo() {
         logger.info("Start getReleaseInfo.");
-        return null;
+        return releaseService.getReleaseInfo();
     }
 
    /* @RequestMapping(value = "/attachment/create", method = RequestMethod.POST)

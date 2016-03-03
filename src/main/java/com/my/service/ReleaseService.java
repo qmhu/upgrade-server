@@ -1,37 +1,31 @@
 /**
- * 
+ *
  */
 package com.my.service;
 
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
+import com.my.exception.BusinessException;
+import com.my.model.ReleaseFile;
+import com.my.model.ReleaseInfo;
+import com.my.model.ReleasePlan;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.support.PropertiesLoaderUtils;
+import org.springframework.stereotype.Service;
+
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
-
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.support.PropertiesLoaderUtils;
-import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
-
-import com.my.model.PackageMeta;
-import com.my.model.ReleaseFile;
-import com.my.model.ReleaseInfo;
-import com.my.model.ReleasePlan;
+import java.util.regex.Pattern;
 
 /**
  * @author I311862
- *
  */
 @Service("releaseService")
 public class ReleaseService {
@@ -39,55 +33,135 @@ public class ReleaseService {
     private static final Logger logger = LoggerFactory.getLogger(ReleaseService.class);
     private String metaFile;
     private ReleaseInfo releaseInfo;
-    
-    public ReleaseService() throws IOException{
-    	Properties props = PropertiesLoaderUtils.loadProperties(new ClassPathResource("/application.properties"));
-    	this.metaFile = props.getProperty("configFolder") + "meta.json";
+
+    public ReleaseService() throws IOException {
+        Properties props = PropertiesLoaderUtils.loadProperties(new ClassPathResource("application.properties"));
+        this.metaFile = props.getProperty("configFolder") + "meta.json";
     }
 
     public ReleaseInfo getReleaseInfo() {
-    	if(releaseInfo == null){
-    		logger.info("begin load ReleaseInfo from meta.json, path is:" + this.metaFile);
-    		
-    		releaseInfo = new ReleaseInfo();
-    		List<ReleaseFile> files = new ArrayList<ReleaseFile>();
-    		List<ReleasePlan> plans = new ArrayList<ReleasePlan>();
-    		releaseInfo.setFiles(files);
-    		releaseInfo.setPlans(plans);
-    		
-    		JSONParser parser = new JSONParser();
+        if (releaseInfo == null) {
+            logger.info("begin load ReleaseInfo from meta.json, path is:" + this.metaFile);
+
+            ReleaseInfo releaseTmp = new ReleaseInfo();
+            List<ReleaseFile> files = new ArrayList<ReleaseFile>();
+            List<ReleasePlan> plans = new ArrayList<ReleasePlan>();
+            releaseTmp.setFiles(files);
+            releaseTmp.setPlans(plans);
+
+            JSONParser parser = new JSONParser();
             try {
-     
+
                 Object obj = parser.parse(new FileReader(this.metaFile));
-     
+
                 JSONObject configObject = (JSONObject) obj;
-     
+
                 JSONArray plansArray = (JSONArray) configObject.get("plans");
                 JSONArray filesArray = (JSONArray) configObject.get("files");
-                
-                Iterator<ReleasePlan> iteratorPlan = plansArray.iterator();
+
+                Iterator<JSONObject> iteratorPlan = plansArray.iterator();
                 while (iteratorPlan.hasNext()) {
-                	plans.add(iteratorPlan.next());
+                    JSONObject rpObject = iteratorPlan.next();
+                    ReleasePlan releasePlan = new ReleasePlan();
+                    releasePlan.setClient_version((String) rpObject.get("client_version"));
+                    List<String> include_files = new ArrayList<String>();
+                    releasePlan.setInclude_files(include_files);
+
+                    JSONArray include_filesArray = (JSONArray) (rpObject.get("include_files"));
+                    Iterator<String> include_filesIterator = include_filesArray.iterator();
+                    while (include_filesIterator.hasNext()) {
+                        include_files.add(include_filesIterator.next());
+                    }
+                    plans.add(releasePlan);
                 }
-                
-                Iterator<ReleaseFile> iteratorFile = filesArray.iterator();
+
+                Iterator<JSONObject> iteratorFile = filesArray.iterator();
                 while (iteratorFile.hasNext()) {
-                	files.add(iteratorFile.next());
+                    ReleaseFile releaseFile = new ReleaseFile();
+                    JSONObject rfObject = iteratorFile.next();
+                    releaseFile.setName((String) rfObject.get("name"));
+                    releaseFile.setDesc((String) rfObject.get("desc"));
+                    releaseFile.setSrc((String) rfObject.get("src"));
+                    releaseFile.setType((String) rfObject.get("type"));
+                    files.add(releaseFile);
                 }
-                
-                validateReleaseInfo(releaseInfo);
-                
-                this.releaseInfo = releaseInfo;
+
+                if (!validateReleaseInfo(releaseTmp)) {
+                    throw new BusinessException("invalid releaseinfo");
+                }
+
+                this.releaseInfo = releaseTmp;
             } catch (Exception e) {
-            	logger.error("Meet exception during load ReleaseInfo from meta.json, exception is:" + e.getMessage());
+                e.printStackTrace();
+                logger.error("Meet exception during load ReleaseInfo from meta.json, exception is:" + e.getMessage());
             }
-    	}
-    	
+        }
+
         return this.releaseInfo;
     }
-    
-    private void validateReleaseInfo(ReleaseInfo releaseInfo){
-    	
+
+    private boolean validateReleaseInfo(ReleaseInfo releaseInfo) {
+        boolean isValid = true;
+        List<ReleaseFile> releaseFiles = releaseInfo.getFiles();
+        for (ReleaseFile releaseFile : releaseFiles) {
+            if (releaseFile.getName().trim().equals("")) {
+                isValid = false;
+            }
+
+            if (releaseFile.getSrc().trim().equals("")) {
+                isValid = false;
+            }
+
+            if (releaseFile.getDesc().trim().equals("")) {
+                isValid = false;
+            }
+
+            if (!releaseFile.getType().trim().equals("dir") && !releaseFile.getType().trim().equals("file")) {
+                isValid = false;
+            }
+
+        }
+
+        List<ReleasePlan> releasePlans = releaseInfo.getPlans();
+        for (ReleasePlan releasePlan : releasePlans) {
+            if (releasePlan.getClient_version().trim().equals("")) {
+                isValid = false;
+            }
+
+            if (releasePlan.getClient_version().trim().equals("")) {
+                isValid = false;
+            }
+
+            if (!this.isValidVersion(releasePlan.getClient_version())) {
+                isValid = false;
+            }
+        }
+
+        return isValid;
+    }
+
+    private boolean isValidVersion(String version) {
+        return Pattern.compile("^(\\d+\\.)?(\\d+\\.)?(\\d+)?$").matcher(version).matches();
+    }
+
+    private Integer versionCompare(String str1, String str2) {
+        String[] vals1 = str1.split("\\.");
+        String[] vals2 = str2.split("\\.");
+        int i = 0;
+        // set index to first non-equal ordinal or length of shortest version string
+        while (i < vals1.length && i < vals2.length && vals1[i].equals(vals2[i])) {
+            i++;
+        }
+        // compare first non-equal ordinal number
+        if (i < vals1.length && i < vals2.length) {
+            int diff = Integer.valueOf(vals1[i]).compareTo(Integer.valueOf(vals2[i]));
+            return Integer.signum(diff);
+        }
+        // the strings are equal or one string is a substring of the other
+        // e.g. "1.2.3" = "1.2.3" or "1.2.3" < "1.2.3.4"
+        else {
+            return Integer.signum(vals1.length - vals2.length);
+        }
     }
     
 

@@ -27,7 +27,7 @@
     <!-- mvc:resources mapping="swagger-ui.html" location="classpath:/META-INF/resources/docs"/-->
     <mvc:resources mapping="/webjars/**" location="classpath:/META-INF/resources/webjars/"/>
 
-    <bean name="/openApiSwaggerConfig" class="com.eshop.swagger.OpenAPISwaggerConfig" />
+    <bean name="/openApiSwaggerConfig" class="com.my.swagger.OpenAPISwaggerConfig" />
 
 
 </beans>
