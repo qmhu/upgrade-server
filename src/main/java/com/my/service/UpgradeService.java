@@ -1,37 +1,76 @@
 /**
- * 
+ *
  */
 package com.my.service;
 
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.util.ArrayList;
-import java.util.List;
-
+import com.my.exception.BusinessException;
+import com.my.model.UpgradeInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
-import com.my.model.PackageMeta;
+import javax.servlet.http.HttpServletResponse;
+import java.io.*;
 
 /**
  * @author I311862
- *
  */
 @Service("upgradeService")
 public class UpgradeService {
 
     private static final Logger logger = LoggerFactory.getLogger(UpgradeService.class);
 
+    @Autowired
+    private ReleaseService releaseService;
 
-    public PackageMeta getUpgradeMeta() {
-    	PackageMeta upgradeMeta = new PackageMeta();
-        return upgradeMeta;
+    public UpgradeInfo getUpgradeInfo(String clientVersion, String module) {
+        UpgradeInfo upgradeInfo = new UpgradeInfo();
+        upgradeInfo.setVersion(releaseService.getReleaseVersion());
+        upgradeInfo.setReleaseFiles();
+
+        return upgradeInfo;
     }
-    
+
+    public void download(HttpServletResponse response, String filename) {
+        BufferedInputStream bis = null;
+        BufferedOutputStream bos = null;
+        try {
+            String downLoadPath = this.releaseService.getDownloadFilePath(filename);
+            if (downLoadPath == null) {
+                throw new BusinessException("Download file not exist :" + filename);
+            }
+            //获取文件的长度
+            long fileLength = new File(downLoadPath).length();
+            //设置文件输出类型
+            response.setContentType("application/octet-stream");
+            response.setHeader("Content-disposition", "attachment; filename="
+                    + new String(filename.getBytes("utf-8"), "ISO8859-1"));
+            //设置输出长度
+            response.setHeader("Content-Length", String.valueOf(fileLength));
+            //获取输入流
+            bis = new BufferedInputStream(new FileInputStream(downLoadPath));
+            //输出流
+            bos = new BufferedOutputStream(response.getOutputStream());
+            byte[] buff = new byte[2048];
+            int bytesRead;
+            while (-1 != (bytesRead = bis.read(buff, 0, buff.length))) {
+                bos.write(buff, 0, bytesRead);
+            }
+        } catch (Exception ex) {
+            logger.error("Meet exception during download file, exception is:" + ex.getMessage());
+            ex.printStackTrace();
+            throw new BusinessException("Meet exception during download file, exception is:" + ex.getMessage());
+        } finally {
+            try {
+                bis.close();
+                bos.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+    }
 
     /*public Attachment createAttachment(MultipartFile file, String name, String type, int size, String description) {
 

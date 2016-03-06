@@ -6,18 +6,20 @@ package com.my.service;
 import com.my.exception.BusinessException;
 import com.my.model.ReleaseFile;
 import com.my.model.ReleaseInfo;
+import com.my.model.ReleaseModule;
 import com.my.model.ReleasePlan;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.support.PropertiesLoaderUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -39,65 +41,77 @@ public class ReleaseService {
         this.metaFile = props.getProperty("configFolder") + "meta.json";
     }
 
-    public ReleaseInfo getReleaseInfo() {
+    public ReleaseInfo getReleaseInfo() throws IOException, ParseException {
         if (releaseInfo == null) {
             logger.info("begin load ReleaseInfo from meta.json, path is:" + this.metaFile);
 
-            ReleaseInfo releaseTmp = new ReleaseInfo();
-            List<ReleaseFile> files = new ArrayList<ReleaseFile>();
-            List<ReleasePlan> plans = new ArrayList<ReleasePlan>();
-            releaseTmp.setFiles(files);
-            releaseTmp.setPlans(plans);
-
             JSONParser parser = new JSONParser();
-            try {
-
-                Object obj = parser.parse(new FileReader(this.metaFile));
-
-                JSONObject configObject = (JSONObject) obj;
-
-                JSONArray plansArray = (JSONArray) configObject.get("plans");
-                JSONArray filesArray = (JSONArray) configObject.get("files");
-
-                Iterator<JSONObject> iteratorPlan = plansArray.iterator();
-                while (iteratorPlan.hasNext()) {
-                    JSONObject rpObject = iteratorPlan.next();
-                    ReleasePlan releasePlan = new ReleasePlan();
-                    releasePlan.setClient_version((String) rpObject.get("client_version"));
-                    List<String> include_files = new ArrayList<String>();
-                    releasePlan.setInclude_files(include_files);
-
-                    JSONArray include_filesArray = (JSONArray) (rpObject.get("include_files"));
-                    Iterator<String> include_filesIterator = include_filesArray.iterator();
-                    while (include_filesIterator.hasNext()) {
-                        include_files.add(include_filesIterator.next());
-                    }
-                    plans.add(releasePlan);
-                }
-
-                Iterator<JSONObject> iteratorFile = filesArray.iterator();
-                while (iteratorFile.hasNext()) {
-                    ReleaseFile releaseFile = new ReleaseFile();
-                    JSONObject rfObject = iteratorFile.next();
-                    releaseFile.setName((String) rfObject.get("name"));
-                    releaseFile.setDesc((String) rfObject.get("desc"));
-                    releaseFile.setSrc((String) rfObject.get("src"));
-                    releaseFile.setType((String) rfObject.get("type"));
-                    files.add(releaseFile);
-                }
-
-                if (!validateReleaseInfo(releaseTmp)) {
-                    throw new BusinessException("invalid releaseinfo");
-                }
-
-                this.releaseInfo = releaseTmp;
-            } catch (Exception e) {
-                e.printStackTrace();
-                logger.error("Meet exception during load ReleaseInfo from meta.json, exception is:" + e.getMessage());
+            Object obj = parser.parse(new FileReader(this.metaFile));
+            ReleaseInfo releaseTmp = this.generateReleaseInfo(obj);
+            if (!validateReleaseInfo(releaseTmp)) {
+                throw new BusinessException("invalid releaseinfo");
             }
+
+            this.releaseInfo = releaseTmp;
         }
 
         return this.releaseInfo;
+    }
+
+    private ReleaseInfo generateReleaseInfo(Object obj) {
+        ReleaseInfo releaseTmp = new ReleaseInfo();
+        List<ReleaseFile> files = new ArrayList<ReleaseFile>();
+        List<ReleaseModule> modules = new ArrayList<ReleaseModule>();
+        releaseTmp.setFiles(files);
+        releaseTmp.setModules(modules);
+
+        JSONObject configObject = (JSONObject) obj;
+
+        JSONArray modulesArray = (JSONArray) configObject.get("modules");
+        JSONArray filesArray = (JSONArray) configObject.get("files");
+
+        Iterator<JSONObject> iteratorModule = modulesArray.iterator();
+        while (iteratorModule.hasNext()) {
+            JSONObject mObject = iteratorModule.next();
+            ReleaseModule releaseModule = new ReleaseModule();
+            releaseModule.setModule((String) mObject.get("module"));
+
+            List<ReleasePlan> releasePlans = new ArrayList<ReleasePlan>();
+            releaseModule.setPlans(releasePlans);
+
+            JSONArray releasePlanArray = (JSONArray) (mObject.get("plans"));
+            Iterator<JSONObject> releasePlansIterator = releasePlanArray.iterator();
+            while (releasePlansIterator.hasNext()) {
+                JSONObject rpObject = releasePlansIterator.next();
+                ReleasePlan releasePlan = new ReleasePlan();
+                releasePlan.setClient_version((String)rpObject.get("client_version"));
+
+                List<String> downloadFiles = new ArrayList<String>();
+                releasePlan.setDownload_files(downloadFiles);
+                JSONArray downloadFileArray = (JSONArray) (mObject.get("download_files"));
+                Iterator<String> downloadFileIterator = downloadFileArray.iterator();
+                while (downloadFileIterator.hasNext()){
+                    downloadFiles.add(downloadFileIterator.next());
+                }
+
+                releasePlans.add(releasePlan);
+            }
+
+            modules.add(releaseModule);
+        }
+
+        Iterator<JSONObject> iteratorFile = filesArray.iterator();
+        while (iteratorFile.hasNext()) {
+            ReleaseFile releaseFile = new ReleaseFile();
+            JSONObject rfObject = iteratorFile.next();
+            releaseFile.setName((String) rfObject.get("name"));
+            releaseFile.setDest((String) rfObject.get("desc"));
+            releaseFile.setSrc((String) rfObject.get("src"));
+            releaseFile.setType((String) rfObject.get("type"));
+            files.add(releaseFile);
+        }
+
+        return releaseTmp;
     }
 
     private boolean validateReleaseInfo(ReleaseInfo releaseInfo) {
@@ -112,7 +126,7 @@ public class ReleaseService {
                 isValid = false;
             }
 
-            if (releaseFile.getDesc().trim().equals("")) {
+            if (releaseFile.getDest().trim().equals("")) {
                 isValid = false;
             }
 
@@ -122,18 +136,34 @@ public class ReleaseService {
 
         }
 
-        List<ReleasePlan> releasePlans = releaseInfo.getPlans();
-        for (ReleasePlan releasePlan : releasePlans) {
-            if (releasePlan.getClient_version().trim().equals("")) {
+        if (releaseInfo.getVersion().trim().equals("")){
+            isValid = false;
+        }
+
+        List<ReleaseModule> releaseModules = releaseInfo.getModules();
+        for (ReleaseModule releaseModule : releaseModules) {
+            if (releaseModule.getModule().trim().equals("")) {
                 isValid = false;
             }
 
-            if (releasePlan.getClient_version().trim().equals("")) {
-                isValid = false;
-            }
+            for(ReleasePlan releasePlan : releaseModule.getPlans()) {
+                if (releasePlan.getClient_version().trim().equals("")) {
+                    isValid = false;
+                }
 
-            if (!this.isValidVersion(releasePlan.getClient_version())) {
-                isValid = false;
+                if (releasePlan.getClient_version().trim().equals("")) {
+                    isValid = false;
+                }
+
+                if (!this.isValidVersion(releasePlan.getClient_version())) {
+                    isValid = false;
+                }
+
+                for (String filename : releasePlan.getDownload_files()){
+                    if (filename.trim().equals("")) {
+                        isValid = false;
+                    }
+                }
             }
         }
 
@@ -165,39 +195,64 @@ public class ReleaseService {
     }
     
 
-    /*public Attachment createAttachment(MultipartFile file, String name, String type, int size, String description) {
-
+    public ReleaseInfo createRelease(MultipartFile file) {
         // 1.store file in tmp dir
         if (!file.isEmpty()) {
             try {
                 byte[] bytes = file.getBytes();
+                String configUpload = new String(bytes);
+                JSONParser parser = new JSONParser();
+                Object configObj = parser.parse(configUpload);
+                ReleaseInfo releaseTmp = this.generateReleaseInfo(configObj);
 
-                // Creating the directory to store file
-                String rootPath = System.getProperty("catalina.home");
-                File dir = new File(rootPath + File.separator + "tmpFiles");
-                if (!dir.exists())
-                    dir.mkdirs();
+                if (!validateReleaseInfo(releaseTmp)) {
+                    throw new BusinessException("invalid release info, please check your meta.json file");
+                }
 
                 // Create the file on server
-                File serverFile = new File(dir.getAbsolutePath() + File.separator + name);
-                BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(serverFile));
+                File metaJsonFile = new File(this.metaFile);
+                BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(metaJsonFile));
                 stream.write(bytes);
                 stream.close();
 
-                logger.info("Server File Location=" + serverFile.getAbsolutePath());
-
+                logger.info("Save ReleaseInfo in server, File Location=" + metaJsonFile.getAbsolutePath());
+                this.releaseInfo = releaseTmp;
             } catch (Exception e) {
-                logger.error("Upload file failed, filename is " + name + " exception:" + e.getMessage());
-                throw new BusinessException("Upload file failed, filename is " + name + " exception:" + e.getMessage());
+                logger.error("Save ReleaseInfo failed, exception:" + e.getMessage());
+                throw new BusinessException("Save ReleaseInfo failed, filename is exception:" + e.getMessage());
             }
         } else {
-            logger.error("Upload file failed because file is empty, filename is " + name);
-            throw new BusinessException("Upload file failed because file is empty, filename is " + name);
+            logger.error("Upload file failed because file is empty");
+            throw new BusinessException("Upload file failed because file is empty");
         }
 
-        // 2.save attachement to DB
+        return this.releaseInfo;
+    }
+
+    public String getDownloadFilePath(String filename){
+        List<ReleaseFile> releaseFiles = this.releaseInfo.getFiles();
+        for(ReleaseFile releaseFile : releaseFiles){
+            if (releaseFile.getName().equals(filename)){
+                return releaseFile.getSrc();
+            }
+        }
 
         return null;
-    }*/
+    }
+
+    public String getReleaseVersion(){
+        return this.releaseInfo.getVersion();
+    }
+
+    public List<ReleaseFile> getReleaseFileForUpgrade(String clientVersion, String module){
+        for (ReleaseModule releaseModule : this.releaseInfo.getModules()){
+            if (releaseModule.getModule().equals(module)){
+                for (ReleasePlan releasePlan : releaseModule.getPlans()){
+                    if (releasePlan.getClient_version().equals())
+                }
+
+            }
+        }
+    }
 
 }

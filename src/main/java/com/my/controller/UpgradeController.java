@@ -1,22 +1,19 @@
 package com.my.controller;
 
+import com.my.service.UpgradeService;
 import io.swagger.annotations.Api;
-
-import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 
-import com.my.model.PackageMeta;
-import com.my.service.UpgradeService;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * Handles requests for the Upgrade service.
@@ -31,8 +28,20 @@ public class UpgradeController {
     private UpgradeService upgradeService;
 
     @RequestMapping(value = "/upgrade/info", method = RequestMethod.GET)
-    public @ResponseBody PackageMeta getUpgradeInfo(@RequestParam("name") String name) {
+    public
+    @ResponseBody
+    void getUpgradeInfo(@RequestParam("name") String name) {
         logger.info("Start getUpgradeMeta. name=" + name);
+    }
+
+    @RequestMapping(value = "/release/download")
+    public ModelAndView download(HttpServletRequest request,
+                                 HttpServletResponse response,
+                                 @RequestParam("name") String name) throws Exception {
+
+        String storeName = "房地.txt";
+        String contentType = "application/octet-stream";
+        ReleaseController.download(request, response, storeName, contentType);
         return null;
     }
 

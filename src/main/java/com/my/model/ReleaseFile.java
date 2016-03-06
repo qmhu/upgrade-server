@@ -1,17 +1,14 @@
 package com.my.model;
 
-import java.awt.List;
 import java.io.Serializable;
-import java.util.Date;
-import java.util.Map;
 
 public class ReleaseFile implements Serializable {
 
-    private static final long serialVersionUID = -7568613177795333322L;
+    private static final long serialVersionUID = -2568613177795333322L;
 
     private String name;
     private String src;
-    private String desc;
+    private String dest;
     private String type;
     
 	public String getName() {
@@ -26,11 +23,11 @@ public class ReleaseFile implements Serializable {
 	public void setSrc(String src) {
 		this.src = src;
 	}
-	public String getDesc() {
-		return desc;
+	public String getDest() {
+		return dest;
 	}
-	public void setDesc(String desc) {
-		this.desc = desc;
+	public void setDest(String dest) {
+		this.dest = dest;
 	}
 	public String getType() {
 		return type;

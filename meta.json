@@ -1,30 +1,55 @@
 {
-	"plans":[
+	"version": "1.0.0",
+	"files": {
+		[
+			{
+				"name": "xxx.dll",
+				"src": "lib/xxx.dll",
+				"dest": "lib/xxx.dll",
+				"type": "file"
+			},
+			{
+				"name": "data",
+				"src": "dat",
+				"dest": "dat",
+				"type": "file"
+			},
+			{
+				"name": "upgrade.exe",
+				"src": "upgrade/upgrade.exe",
+				"dest": "upgrade.exe",
+				"type": "file"
+			}
+		]
+	}
+	"modules":[
 				{
-					"client_version":"2.0.0",
-					"include_files":["xxx.dll","data"]		
-				},
-				{
-					"client_version":"2.0.0",
-					"include_files":["xxx.dll","data"]	
-				},
-				{
-					"client_version":"2.0.0",
-					"include_files":["data"]	
+					"module": "client",
+					"plans":[
+						{
+							"client_version":"1.0.0",
+							"download_files":["xxx.dll","data"]		
+						},
+						{
+							"client_version":"2.0.0",
+							"download_files":["xxx.dll","data"]	
+						},
+						{
+							"client_version":"2.1.0",
+							"download_files":["data"]	
+						}
+					]
 				}
-	],
-	"files":[
+			],
+			[
 				{
-					"name": "xxx.dll",
-					"src": "lib/xxx.dll",
-					"desc": "lib/xxx.dll",
-					"type": "file"
-				},
-				{
-					"name": "data",
-					"src": "dat",
-					"desc": "dat",
-					"type": "dir"
+					"module": "upgrade_client",
+					"plans":[
+						{
+							"client_version":"1.0.0",
+							"include_files":["upgrade.exe"]		
+						}
+					]
 				}
-	]
+			]
 }
