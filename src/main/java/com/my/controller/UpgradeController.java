@@ -1,5 +1,6 @@
 package com.my.controller;
 
+import com.my.model.UpgradeInfo;
 import com.my.service.UpgradeService;
 import io.swagger.annotations.Api;
 import org.slf4j.Logger;
@@ -28,20 +29,18 @@ public class UpgradeController {
     private UpgradeService upgradeService;
 
     @RequestMapping(value = "/upgrade/info", method = RequestMethod.GET)
-    public
-    @ResponseBody
-    void getUpgradeInfo(@RequestParam("name") String name) {
-        logger.info("Start getUpgradeMeta. name=" + name);
+    public @ResponseBody UpgradeInfo getUpgradeInfo(@RequestParam("clientVersion") String clientVersion,
+                                                    @RequestParam("module") String module) {
+        logger.info("Start getUpgradeInfo. clientVersion=" + clientVersion + " module=" + module);
+        return upgradeService.getUpgradeInfo(clientVersion, module);
     }
 
-    @RequestMapping(value = "/release/download")
+    @RequestMapping(value = "/upgrade/download")
     public ModelAndView download(HttpServletRequest request,
                                  HttpServletResponse response,
                                  @RequestParam("name") String name) throws Exception {
-
-        String storeName = "房地.txt";
-        String contentType = "application/octet-stream";
-        ReleaseController.download(request, response, storeName, contentType);
+        logger.info("Start download. name=" + name);
+        upgradeService.download(response, name);
         return null;
     }
 

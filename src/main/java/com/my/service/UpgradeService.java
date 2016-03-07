@@ -27,8 +27,10 @@ public class UpgradeService {
     public UpgradeInfo getUpgradeInfo(String clientVersion, String module) {
         UpgradeInfo upgradeInfo = new UpgradeInfo();
         upgradeInfo.setVersion(releaseService.getReleaseVersion());
-        upgradeInfo.setReleaseFiles();
-
+        upgradeInfo.setReleaseFiles(releaseService.getReleaseFileForUpgrade(clientVersion, module));
+        if (upgradeInfo.getReleaseFiles() == null){
+            throw new BusinessException("not get upgrade file for this client version and module");
+        }
         return upgradeInfo;
     }
 
@@ -67,6 +69,7 @@ public class UpgradeService {
                 bos.close();
             } catch (IOException e) {
                 e.printStackTrace();
+                throw new BusinessException("Meet exception during download file, exception is:" + e.getMessage());
             }
         }
 

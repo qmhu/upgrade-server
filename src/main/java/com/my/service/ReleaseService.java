@@ -36,9 +36,12 @@ public class ReleaseService {
     private String metaFile;
     private ReleaseInfo releaseInfo;
 
-    public ReleaseService() throws IOException {
+    public ReleaseService() throws IOException, ParseException {
         Properties props = PropertiesLoaderUtils.loadProperties(new ClassPathResource("application.properties"));
         this.metaFile = props.getProperty("configFolder") + "meta.json";
+
+        // load release info when launch container
+        getReleaseInfo();
     }
 
     public ReleaseInfo getReleaseInfo() throws IOException, ParseException {
@@ -65,8 +68,10 @@ public class ReleaseService {
         releaseTmp.setFiles(files);
         releaseTmp.setModules(modules);
 
+
         JSONObject configObject = (JSONObject) obj;
 
+        releaseTmp.setVersion((String)configObject.get("version"));
         JSONArray modulesArray = (JSONArray) configObject.get("modules");
         JSONArray filesArray = (JSONArray) configObject.get("files");
 
@@ -88,7 +93,7 @@ public class ReleaseService {
 
                 List<String> downloadFiles = new ArrayList<String>();
                 releasePlan.setDownload_files(downloadFiles);
-                JSONArray downloadFileArray = (JSONArray) (mObject.get("download_files"));
+                JSONArray downloadFileArray = (JSONArray) (rpObject.get("download_files"));
                 Iterator<String> downloadFileIterator = downloadFileArray.iterator();
                 while (downloadFileIterator.hasNext()){
                     downloadFiles.add(downloadFileIterator.next());
@@ -105,7 +110,7 @@ public class ReleaseService {
             ReleaseFile releaseFile = new ReleaseFile();
             JSONObject rfObject = iteratorFile.next();
             releaseFile.setName((String) rfObject.get("name"));
-            releaseFile.setDest((String) rfObject.get("desc"));
+            releaseFile.setDest((String) rfObject.get("dest"));
             releaseFile.setSrc((String) rfObject.get("src"));
             releaseFile.setType((String) rfObject.get("type"));
             files.add(releaseFile);
@@ -248,11 +253,33 @@ public class ReleaseService {
         for (ReleaseModule releaseModule : this.releaseInfo.getModules()){
             if (releaseModule.getModule().equals(module)){
                 for (ReleasePlan releasePlan : releaseModule.getPlans()){
-                    if (releasePlan.getClient_version().equals())
-                }
+                    if (releasePlan.getClient_version().equals(clientVersion)){
+                        List<String> downloadFiles = releasePlan.getDownload_files();
 
+                        List<ReleaseFile> releaseFiles = new ArrayList<ReleaseFile>();
+                        // get ReleaseFile from filename
+                        for(String filename : downloadFiles){
+                            boolean isFind = false;
+                            for (ReleaseFile releaseFile : this.releaseInfo.getFiles()){
+                                if (filename.equals(releaseFile.getName())){
+                                    releaseFiles.add(releaseFile);
+                                    isFind = true;
+                                    break;
+                                }
+                            }
+
+                            if (!isFind){
+                                throw new BusinessException("not found match for filename :" + filename);
+                            }
+                        }
+
+                        return releaseFiles;
+                    }
+                }
             }
         }
+
+        return null;
     }
 
 }

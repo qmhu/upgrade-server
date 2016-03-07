@@ -1,27 +1,25 @@
 {
-	"version": "1.0.0",
-	"files": {
-		[
-			{
-				"name": "xxx.dll",
-				"src": "lib/xxx.dll",
-				"dest": "lib/xxx.dll",
-				"type": "file"
-			},
-			{
-				"name": "data",
-				"src": "dat",
-				"dest": "dat",
-				"type": "file"
-			},
-			{
-				"name": "upgrade.exe",
-				"src": "upgrade/upgrade.exe",
-				"dest": "upgrade.exe",
-				"type": "file"
-			}
-		]
-	}
+	"version": "3.0.0",
+	"files":[
+				{
+					"name": "xxx.dll",
+					"src": "lib/xxx.dll",
+					"dest": "lib/xxx.dll",
+					"type": "file"
+				},
+				{
+					"name": "data",
+					"src": "readme.txt",
+					"dest": "readme.txt",
+					"type": "file"
+				},
+				{
+					"name": "upgrade.exe",
+					"src": "upgrade/upgrade.exe",
+					"dest": "upgrade.exe",
+					"type": "file"
+				}
+			],
 	"modules":[
 				{
 					"module": "client",
@@ -39,15 +37,13 @@
 							"download_files":["data"]	
 						}
 					]
-				}
-			],
-			[
+				},
 				{
 					"module": "upgrade_client",
 					"plans":[
 						{
 							"client_version":"1.0.0",
-							"include_files":["upgrade.exe"]		
+							"download_files":["upgrade.exe"]		
 						}
 					]
 				}
