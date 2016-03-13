@@ -1,0 +1,19 @@
+ERROR get version failed : TRACE:   at System.IO.__Error.WinIOError(Int32 errorCode, String maybeFullPath)
+   at System.IO.FileStream.Init(String path, FileMode mode, FileAccess access, Int32 rights, Boolean useRights, FileShare share, Int32 bufferSize, FileOptions options, SECURITY_ATTRIBUTES secAttrs, String msgPath, Boolean bFromProxy)
+   at System.IO.FileStream..ctor(String path, FileMode mode, FileAccess access, FileShare share, Int32 bufferSize, FileOptions options, String msgPath, Boolean bFromProxy)
+   at System.IO.FileStream..ctor(String path, FileMode mode, FileAccess access, FileShare share, Int32 bufferSize, FileOptions options)
+   at System.IO.StreamReader..ctor(String path, Encoding encoding, Boolean detectEncodingFromByteOrderMarks, Int32 bufferSize)
+   at System.IO.StreamReader..ctor(String path, Boolean detectEncodingFromByteOrderMarks)
+   at Updater.Util.Util.getVersion() in C:\Users\i311862\documents\visual studio 2015\Projects\upgrade-client\ConsoleApplication1\Util\Util.cs:line 17
+INFO not found version file, set version to 1.0.0
+INFO begin to get upgrade info, client version : 1.0.0 module : client
+INFO create tmp folder: ./upgrade_tmp
+INFO start to download file :Updater.Model.ReleaseFile to ./upgrade_tmp/xxx.dll
+INFO try create folder for target file :lib/xxx.dll
+INFO move file :./upgrade_tmp/xxx.dll lib/xxx.dll
+INFO start to download file :Updater.Model.ReleaseFile to ./upgrade_tmp/data
+INFO try create folder for target file :readme.txt
+INFO move file :./upgrade_tmp/data readme.txt
+INFO update client version :3.0.0
+INFO begin to get upgrade info, client version : 3.0.0 module : client
+INFO No upgrade happens.

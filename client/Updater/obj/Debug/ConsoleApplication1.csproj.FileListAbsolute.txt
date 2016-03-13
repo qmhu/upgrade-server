@@ -1,0 +1,7 @@
+c:\users\i311862\documents\visual studio 2015\Projects\upgrade-client\ConsoleApplication1\bin\Debug\ConsoleApplication1.exe.config
+c:\users\i311862\documents\visual studio 2015\Projects\upgrade-client\ConsoleApplication1\bin\Debug\ConsoleApplication1.exe
+c:\users\i311862\documents\visual studio 2015\Projects\upgrade-client\ConsoleApplication1\bin\Debug\ConsoleApplication1.pdb
+c:\users\i311862\documents\visual studio 2015\Projects\upgrade-client\ConsoleApplication1\obj\Debug\ConsoleApplication1.csprojResolveAssemblyReference.cache
+c:\users\i311862\documents\visual studio 2015\Projects\upgrade-client\ConsoleApplication1\obj\Debug\ConsoleApplication1.exe
+c:\users\i311862\documents\visual studio 2015\Projects\upgrade-client\ConsoleApplication1\obj\Debug\ConsoleApplication1.pdb
+c:\users\i311862\documents\visual studio 2015\Projects\upgrade-client\ConsoleApplication1\bin\Debug\Updater.exe.config
