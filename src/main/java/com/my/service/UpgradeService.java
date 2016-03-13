@@ -28,9 +28,7 @@ public class UpgradeService {
         UpgradeInfo upgradeInfo = new UpgradeInfo();
         upgradeInfo.setVersion(releaseService.getReleaseVersion());
         upgradeInfo.setReleaseFiles(releaseService.getReleaseFileForUpgrade(clientVersion, module));
-        if (upgradeInfo.getReleaseFiles() == null){
-            throw new BusinessException("not get upgrade file for this client version and module");
-        }
+
         return upgradeInfo;
     }
 
