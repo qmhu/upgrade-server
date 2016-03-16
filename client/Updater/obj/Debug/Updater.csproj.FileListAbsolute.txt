@@ -8,3 +8,10 @@ C:\Users\i311862\documents\visual studio 2015\Projects\upgrade-client\ConsoleApp
 C:\Users\i311862\Documents\Visual Studio 2015\Projects\upgrade-client\Updater\bin\Debug\Updater.exe.config
 C:\Users\i311862\Documents\Visual Studio 2015\Projects\upgrade-client\Updater\obj\Debug\Updater.exe
 C:\Users\i311862\Documents\Visual Studio 2015\Projects\upgrade-client\Updater\obj\Debug\Updater.pdb
+C:\Users\i311862\Documents\gitproject\upgrade-server\client\Updater\bin\Debug\Updater.exe.config
+C:\Users\i311862\Documents\gitproject\upgrade-server\client\Updater\obj\Debug\Updater.exe
+C:\Users\i311862\Documents\gitproject\upgrade-server\client\Updater\obj\Debug\Updater.pdb
+C:\Users\i311862\Documents\gitproject\upgrade-server\client\Updater\bin\Debug\Updater.exe
+C:\Users\i311862\Documents\gitproject\upgrade-server\client\Updater\bin\Debug\Updater.pdb
+C:\Users\i311862\Documents\gitproject\upgrade-server\client\Updater\bin\Debug\Newtonsoft.Json.dll
+C:\Users\i311862\Documents\gitproject\upgrade-server\client\Updater\obj\Debug\Updater.csprojResolveAssemblyReference.cache

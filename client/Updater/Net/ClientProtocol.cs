@@ -42,6 +42,8 @@ namespace Updater.Net
 
             fs.Flush();
             fs.Close();
+
+            String md5File = Util.Util.getMd5(dest);
         }
 
     }
