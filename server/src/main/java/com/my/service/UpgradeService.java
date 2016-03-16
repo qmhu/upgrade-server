@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 /**
  * @author I311862
@@ -32,7 +34,8 @@ public class UpgradeService {
         return upgradeInfo;
     }
 
-    public void download(HttpServletResponse response, String filename) {
+    public void download(HttpServletResponse response, String filename) throws FileNotFoundException {
+
         BufferedInputStream bis = null;
         BufferedOutputStream bos = null;
         try {
@@ -40,10 +43,13 @@ public class UpgradeService {
             if (downLoadPath == null) {
                 throw new BusinessException("Download file not exist :" + filename);
             }
+
+            String fileMd5 = getMD5ForFile(downLoadPath);
             //获取文件的长度
             long fileLength = new File(downLoadPath).length();
             //设置文件输出类型
             response.setContentType("application/octet-stream");
+            response.setHeader("Content-MD5", fileMd5);
             response.setHeader("Content-disposition", "attachment; filename="
                     + new String(filename.getBytes("utf-8"), "ISO8859-1"));
             //设置输出长度
@@ -71,6 +77,30 @@ public class UpgradeService {
             }
         }
 
+    }
+
+    public String getMD5ForFile(String filename) throws IOException, NoSuchAlgorithmException {
+        InputStream fis =  new FileInputStream(filename);
+
+        byte[] buffer = new byte[1024];
+        MessageDigest complete = MessageDigest.getInstance("MD5");
+        int numRead;
+
+        do {
+            numRead = fis.read(buffer);
+            if (numRead > 0) {
+                complete.update(buffer, 0, numRead);
+            }
+        } while (numRead != -1);
+
+        fis.close();
+        byte[] contentByte = complete.digest();
+        String result = "";
+
+        for (int i=0; i < contentByte.length; i++) {
+            result += Integer.toString( ( contentByte[i] & 0xff ) + 0x100, 16).substring( 1 );
+        }
+        return result;
     }
 
     /*public Attachment createAttachment(MultipartFile file, String name, String type, int size, String description) {
