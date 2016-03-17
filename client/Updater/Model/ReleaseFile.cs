@@ -11,7 +11,7 @@ namespace Updater.Model
         public String dest { get; set; }
         public String type { get; set; }
 
-        public String toString()
+        public String ToString()
         {
             return "name:" + name + " src:" + src + " dest:" + dest + " type:" + type;
         }

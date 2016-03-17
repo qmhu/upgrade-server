@@ -79,7 +79,7 @@ namespace Updater.Net
             return null;
         }
 
-        public static Stream download(string url)
+        public static HttpWebResponse download(string url)
         {
             HttpWebResponse result = null;
 
@@ -91,18 +91,11 @@ namespace Updater.Net
                 httpWebRequest.Timeout = 600000;
 
                 result = (HttpWebResponse)httpWebRequest.GetResponse();
-                return result.GetResponseStream();
+                return result;
             }
             catch (Exception ex)
             {
-                Logger.getLogger().error(String.Format("Send Http download failed,{0} {1}", url), ex);
-            }
-            finally
-            {
-                if (result != null)
-                {
-                    result.Close();
-                }
+                Logger.getLogger().error(String.Format("Send Http download failed,{0}", url), ex);
             }
 
             return null;

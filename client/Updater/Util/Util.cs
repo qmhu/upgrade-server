@@ -67,7 +67,15 @@ namespace Updater.Util
             {
                 using (var stream = File.OpenRead(filename))
                 {
-                    return Encoding.Default.GetString(md5.ComputeHash(stream));
+                    byte[] md5Byte = md5.ComputeHash(stream);
+
+                    string STR = "";
+ 
+                    for (int I = 0; I < md5Byte.Length; I++)
+                    {
+                        STR += md5Byte[I].ToString("x2");
+                    }
+                    return STR;
                 }
             }
         }

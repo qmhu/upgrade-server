@@ -15,3 +15,10 @@ C:\Users\i311862\Documents\gitproject\upgrade-server\client\Updater\bin\Debug\Up
 C:\Users\i311862\Documents\gitproject\upgrade-server\client\Updater\bin\Debug\Updater.pdb
 C:\Users\i311862\Documents\gitproject\upgrade-server\client\Updater\bin\Debug\Newtonsoft.Json.dll
 C:\Users\i311862\Documents\gitproject\upgrade-server\client\Updater\obj\Debug\Updater.csprojResolveAssemblyReference.cache
+C:\gitproject\upgrade-server\client\Updater\bin\Debug\Updater.exe.config
+C:\gitproject\upgrade-server\client\Updater\bin\Debug\Updater.exe
+C:\gitproject\upgrade-server\client\Updater\bin\Debug\Updater.pdb
+C:\gitproject\upgrade-server\client\Updater\bin\Debug\Newtonsoft.Json.dll
+C:\gitproject\upgrade-server\client\Updater\obj\Debug\Updater.exe
+C:\gitproject\upgrade-server\client\Updater\obj\Debug\Updater.pdb
+C:\gitproject\upgrade-server\client\Updater\obj\Debug\Updater.csprojResolveAssemblyReference.cache

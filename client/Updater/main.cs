@@ -15,31 +15,6 @@ namespace Updater
 
         static void Main(string[] args)
         {
-
-            HttpWebRequest httpWebRequest = (HttpWebRequest)WebRequest.Create("http://www.baidu.com");
-
-            httpWebRequest.Method = "GET";
-            httpWebRequest.Timeout = 60000;
-
-            HttpWebResponse result = (HttpWebResponse)httpWebRequest.GetResponse();
-            StreamReader streamReader = new StreamReader(result.GetResponseStream());
-            string responseContent = streamReader.ReadToEnd();
-            streamReader.Close();
-
-            Console.WriteLine("Content from Baidu:" + responseContent);
-
-            String jsonString = "{'name':'somename','src':'somewhere','dest':'target','type':'file'}";
-            ReleaseFile releaseFile = JavaScriptConvert.DeserializeObject<ReleaseFile>(jsonString);
-
-            Console.WriteLine("Content JSON Object:" + releaseFile.toString());
-
-            Console.WriteLine("Test Successful!");
-            Thread.Sleep(5000);
-
-
-            return;
-
-
             if (args.Length < 1)
             {
                 Console.WriteLine("Usage:Updater.exe client|upgrade_client");
