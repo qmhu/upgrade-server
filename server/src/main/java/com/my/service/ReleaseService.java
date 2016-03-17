@@ -34,11 +34,13 @@ public class ReleaseService {
 
     private static final Logger logger = LoggerFactory.getLogger(ReleaseService.class);
     private String metaFile;
+    private String configFolder;
     private ReleaseInfo releaseInfo;
 
     public ReleaseService() throws IOException, ParseException {
         Properties props = PropertiesLoaderUtils.loadProperties(new ClassPathResource("application.properties"));
         this.metaFile = props.getProperty("configFolder") + "meta.json";
+        this.configFolder = props.getProperty("configFolder");
 
         // load release info when launch container
         getReleaseInfo();
@@ -238,7 +240,7 @@ public class ReleaseService {
         List<ReleaseFile> releaseFiles = this.releaseInfo.getFiles();
         for(ReleaseFile releaseFile : releaseFiles){
             if (releaseFile.getName().equals(filename)){
-                return releaseFile.getSrc();
+                return this.configFolder + releaseFile.getSrc();
             }
         }
 
