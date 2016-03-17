@@ -9,7 +9,7 @@ namespace Updater.Model
         public String version { get; set; }
         public List<ReleaseFile> releaseFiles { get; set; }
 
-        public String toString()
+        public String ToString()
         {
             return "version:" + version + " " + releaseFiles.ToString();
         }

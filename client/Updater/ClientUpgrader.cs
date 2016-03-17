@@ -38,8 +38,11 @@ namespace Updater
 
             Logger.getLogger().info("create tmp folder: ./upgrade_tmp");
 
-            Directory.CreateDirectory("./upgrade_tmp");
-
+            if (!Directory.Exists("./upgrade_tmp"))
+            {
+                Directory.CreateDirectory("./upgrade_tmp");
+            }
+            
             foreach (ReleaseFile releaseFile in upgradeInfo.releaseFiles)
             {
                 String destTmp = "./upgrade_tmp/" + releaseFile.name;
@@ -65,6 +68,10 @@ namespace Updater
 
             Logger.getLogger().info("update client version :" + upgradeInfo.version);
             Util.Util.setVersion(upgradeInfo.version);
+            FileStream fs = new FileStream("upgrade_done", FileMode.Create);
+            fs.Close();
+
+            Logger.getLogger().info("upgrade client done");
         }
 
         

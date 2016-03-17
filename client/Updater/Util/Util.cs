@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace Updater.Util
@@ -59,6 +60,25 @@ namespace Updater.Util
 
         }
 
+
+        public static String getMd5(String filename)
+        {
+            using (var md5 = MD5.Create())
+            {
+                using (var stream = File.OpenRead(filename))
+                {
+                    byte[] md5Byte = md5.ComputeHash(stream);
+
+                    string STR = "";
+ 
+                    for (int I = 0; I < md5Byte.Length; I++)
+                    {
+                        STR += md5Byte[I].ToString("x2");
+                    }
+                    return STR;
+                }
+            }
+        }
 
     }
 }

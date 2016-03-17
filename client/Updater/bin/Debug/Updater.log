@@ -1,19 +1,25 @@
-ERROR get version failed : TRACE:   at System.IO.__Error.WinIOError(Int32 errorCode, String maybeFullPath)
-   at System.IO.FileStream.Init(String path, FileMode mode, FileAccess access, Int32 rights, Boolean useRights, FileShare share, Int32 bufferSize, FileOptions options, SECURITY_ATTRIBUTES secAttrs, String msgPath, Boolean bFromProxy)
-   at System.IO.FileStream..ctor(String path, FileMode mode, FileAccess access, FileShare share, Int32 bufferSize, FileOptions options, String msgPath, Boolean bFromProxy)
-   at System.IO.FileStream..ctor(String path, FileMode mode, FileAccess access, FileShare share, Int32 bufferSize, FileOptions options)
-   at System.IO.StreamReader..ctor(String path, Encoding encoding, Boolean detectEncodingFromByteOrderMarks, Int32 bufferSize)
-   at System.IO.StreamReader..ctor(String path, Boolean detectEncodingFromByteOrderMarks)
-   at Updater.Util.Util.getVersion() in C:\Users\i311862\documents\visual studio 2015\Projects\upgrade-client\ConsoleApplication1\Util\Util.cs:line 17
-INFO not found version file, set version to 1.0.0
 INFO begin to get upgrade info, client version : 1.0.0 module : client
 INFO create tmp folder: ./upgrade_tmp
-INFO start to download file :Updater.Model.ReleaseFile to ./upgrade_tmp/xxx.dll
-INFO try create folder for target file :lib/xxx.dll
-INFO move file :./upgrade_tmp/xxx.dll lib/xxx.dll
-INFO start to download file :Updater.Model.ReleaseFile to ./upgrade_tmp/data
-INFO try create folder for target file :readme.txt
-INFO move file :./upgrade_tmp/data readme.txt
+INFO start to download file :name:arg src:arg dest:arg type:file to ./upgrade_tmp/arg
+INFO try create folder for target file :arg
+INFO move file :./upgrade_tmp/arg arg
+INFO start to download file :name:Player src:Player.exe dest:Player.exe type:file to ./upgrade_tmp/Player
+INFO try create folder for target file :Player.exe
+INFO move file :./upgrade_tmp/Player Player.exe
+INFO start to download file :name:ActorOperation src:BaseTools/ActorOperation.dll dest:BaseTools/ActorOperation.dll type:file to ./upgrade_tmp/ActorOperation
+INFO try create folder for target file :BaseTools/ActorOperation.dll
+INFO move file :./upgrade_tmp/ActorOperation BaseTools/ActorOperation.dll
+INFO start to download file :name:SystemTools.dll src:BaseTools/SystemTools.dll dest:BaseTools/SystemTools.dll type:file to ./upgrade_tmp/SystemTools.dll
+INFO try create folder for target file :BaseTools/SystemTools.dll
+INFO move file :./upgrade_tmp/SystemTools.dll BaseTools/SystemTools.dll
+INFO start to download file :name:Player src:Player.exe dest:Player.exe type:file to ./upgrade_tmp/Player
+INFO delete old file :Player.exe
+INFO move file :./upgrade_tmp/Player Player.exe
+INFO start to download file :name:plugins src:PlugIns/plugins.dat dest:PlugIns/plugins.dat type:file to ./upgrade_tmp/plugins
+INFO try create folder for target file :PlugIns/plugins.dat
+INFO move file :./upgrade_tmp/plugins PlugIns/plugins.dat
+INFO start to download file :name:inn-plugins src:PlugIns/ResourcePlugIns/vlc/plugins.dat dest:PlugIns/ResourcePlugIns/vlc/plugins.dat type:file to ./upgrade_tmp/inn-plugins
+INFO try create folder for target file :PlugIns/ResourcePlugIns/vlc/plugins.dat
+INFO move file :./upgrade_tmp/inn-plugins PlugIns/ResourcePlugIns/vlc/plugins.dat
 INFO update client version :3.0.0
-INFO begin to get upgrade info, client version : 3.0.0 module : client
-INFO No upgrade happens.
+INFO upgrade client done
