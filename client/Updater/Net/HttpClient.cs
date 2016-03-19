@@ -66,7 +66,7 @@ namespace Updater.Net
             }
             catch (Exception ex)
             {
-                Logger.getLogger().error(String.Format("Send Http Get failed,{0} {1}", url), ex);
+                Logger.getLogger().error(String.Format("Send Http Get failed,{0}", url), ex);
             }
             finally
             {

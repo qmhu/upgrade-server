@@ -1,0 +1,6 @@
+C:\gitproject\upgrade-server\client\starter\bin\Debug\Starter.exe.config
+C:\gitproject\upgrade-server\client\starter\bin\Debug\Starter.exe
+C:\gitproject\upgrade-server\client\starter\bin\Debug\Starter.pdb
+C:\gitproject\upgrade-server\client\starter\obj\Debug\Starter.exe
+C:\gitproject\upgrade-server\client\starter\obj\Debug\Starter.pdb
+C:\gitproject\upgrade-server\client\starter\obj\Debug\Starter.csprojResolveAssemblyReference.cache

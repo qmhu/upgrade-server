@@ -23,7 +23,7 @@ namespace Updater
 
             String module = args[0];
 
-            ClientProtocol clientProtocol = new ClientProtocol("http://192.168.31.150:8080");
+            ClientProtocol clientProtocol = new ClientProtocol(System.Configuration.ConfigurationManager.AppSettings["serverurl"]);
             if (module == "client")
             {
                 ClientUpgrader upgrader = new ClientUpgrader(clientProtocol);

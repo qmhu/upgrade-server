@@ -52,19 +52,9 @@ public class ReleaseController {
         logger.info("Submit form");
         List<MultipartFile> files = uploadForm.getFiles();
 
-        List<String> fileNames = new ArrayList<String>();
+        MultipartFile metaFile = files.get(0);
+        releaseService.createRelease(metaFile);
 
-        if(null != files && files.size() > 0) {
-            for (MultipartFile multipartFile : files) {
-
-                String fileName = multipartFile.getOriginalFilename();
-                fileNames.add(fileName);
-                //Handle file content - multipartFile.getInputStream()
-
-            }
-        }
-
-        map.addAttribute("files", fileNames);
         return "FileUploadSuccess";
     }
 

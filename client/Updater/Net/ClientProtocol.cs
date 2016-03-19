@@ -30,30 +30,44 @@ namespace Updater.Net
         public void downloadFile(String filename, String dest)
         {
             String downloadUrl = String.Format("{0}/upgrade/download?name={1}", serverUrl, filename);
-            HttpWebResponse response = HttpClient.download(downloadUrl);
-
-            byte[] buff = new byte[4096];
-            Stream fs = new FileStream(dest, FileMode.Create);
-            int r = 0;
-
-            while ((r = response.GetResponseStream().Read(buff, 0, buff.Length)) > 0)
+            int retrytime = 3;
+            while(retrytime > 0)
             {
-                fs.Write(buff, 0, r);
+                try
+                {
+                    HttpWebResponse response = HttpClient.download(downloadUrl);
+
+                    byte[] buff = new byte[4096];
+                    Stream fs = new FileStream(dest, FileMode.Create);
+                    int r = 0;
+
+                    while ((r = response.GetResponseStream().Read(buff, 0, buff.Length)) > 0)
+                    {
+                        fs.Write(buff, 0, r);
+                    }
+
+                    fs.Flush();
+                    fs.Close();
+
+                    String md5File = Util.Util.getMd5(dest);
+                    String md5Header = response.GetResponseHeader("Content-MD5");
+
+                    response.Close();
+                    if (!md5File.Equals(md5Header))
+                    {
+                        throw new Exception("MD5 not match:" + md5Header + " " + md5File);
+                    }
+
+                    return;
+                }
+                catch (Exception ex)
+                {
+                    Logger.getLogger().error("download file failed, retrytime:" + retrytime + ", error:" + ex);
+                    retrytime--;
+                }
             }
 
-            fs.Flush();
-            fs.Close();
-
-            String md5File = Util.Util.getMd5(dest);
-            String md5Header = response.GetResponseHeader("Content-MD5");
-
-            response.Close();
-            if (!md5File.Equals(md5Header))
-            {
-                throw new Exception("MD5 not match:" + md5Header + " " + md5File);
-            }
-
-            return;
+            throw new Exception("download failed:" + filename);
 
         }
 

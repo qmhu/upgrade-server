@@ -23,3 +23,7 @@ INFO try create folder for target file :PlugIns/ResourcePlugIns/vlc/plugins.dat
 INFO move file :./upgrade_tmp/inn-plugins PlugIns/ResourcePlugIns/vlc/plugins.dat
 INFO update client version :3.0.0
 INFO upgrade client done
+1/1/0001 12:00:00 AM INFO begin to get upgrade info, client version : 3.0.0 module : client
+3/19/2016 11:49:21 AM INFO begin to get upgrade info, client version : 3.0.0 module : client
+3/19/2016 11:49:42 AM ERROR Send Http Get failed,http://192.168.31.150:8080/upgrade/info?clientVersion=3.0.0&module=client TRACE:   at System.Net.HttpWebRequest.GetResponse()
+   at Updater.Net.HttpClient.SendGet(String url) in C:\gitproject\upgrade-server\client\Updater\Net\HttpClient.cs:line 61

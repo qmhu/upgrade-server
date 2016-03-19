@@ -30,7 +30,7 @@ namespace Updater.Util
 
         private void writeLog(String level, String msg)
         {
-            sw.WriteLine(level + " " + msg);
+            sw.WriteLine(DateTime.Now.ToString() + " " + level + " " + msg);
             sw.Flush();
         }
     
