@@ -15,6 +15,7 @@ namespace Updater
 
         static void Main(string[] args)
         {
+
             if (args.Length < 1)
             {
                 Console.WriteLine("Usage:Updater.exe client|upgrade_client");

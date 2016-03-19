@@ -10,3 +10,9 @@
 3/19/2016 1:38:24 PM INFO Run: Updater.exe client.
 3/19/2016 1:38:34 PM INFO client upgrade exit.
 3/19/2016 1:38:37 PM INFO Run: client.
+2016/3/19 22:46:12 INFO try to delete upgrade_done file before updater upgrade.
+2016/3/19 22:46:12 INFO Run: Updater.exe upgrade_client.
+2016/3/19 22:46:14 INFO try to delete upgrade_done file before client upgrade.
+2016/3/19 22:46:14 INFO Run: Updater.exe client.
+2016/3/19 22:46:14 INFO not found upgrade_done file, sleep for a while
+2016/3/19 22:46:16 INFO not found upgrade_done file, sleep for a while

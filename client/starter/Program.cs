@@ -38,8 +38,9 @@ namespace starter
                 {
                     StreamReader objReader = new StreamReader(upgradeDoneString);
                     String line;
-                    while ((line = objReader.ReadLine().Trim()) != null)
+                    while ((line = objReader.ReadLine()) != null)
                     {
+                        line = line.Trim();
                         Logger.getLogger().info("try to delete old updater file:" + line);
                         if (File.Exists(line))
                         {
@@ -57,6 +58,7 @@ namespace starter
                     }
 
                     objReader.Close();
+                    
                 }
 
                 Logger.getLogger().info("try to delete upgrade_done file before client upgrade.");
@@ -95,14 +97,13 @@ namespace starter
             } catch (Exception ex)
             {
                 Logger.getLogger().error("something wrong happens during update:" + ex);
+                Logger.getLogger().error("error trace:" + ex.StackTrace);
             }
 
             Logger.getLogger().info("Run: client:" + programName);
-            Process proClient = new Process();
-            proClient.StartInfo.FileName = programName;
-            proClient.StartInfo.CreateNoWindow = true;
-            proClient.StartInfo.UseShellExecute = false;
-            proClient.Start();
+            Process proApp = new Process();
+            proApp.StartInfo.FileName = programName;
+            proApp.Start();
 
         }
     }

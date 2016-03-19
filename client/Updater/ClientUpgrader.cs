@@ -38,10 +38,13 @@ namespace Updater
 
             Logger.getLogger().info("create tmp folder: ./upgrade_tmp");
 
-            if (!Directory.Exists("./upgrade_tmp"))
+            if (Directory.Exists("./upgrade_tmp"))
             {
-                Directory.CreateDirectory("./upgrade_tmp");
+                Directory.Delete("./upgrade_tmp", true);
             }
+                
+            Directory.CreateDirectory("./upgrade_tmp");
+            
             
             foreach (ReleaseFile releaseFile in upgradeInfo.releaseFiles)
             {

@@ -38,17 +38,19 @@ namespace Updater
 
             Logger.getLogger().info("create tmp folder: ./upgrade_tmp");
 
-            if (!Directory.Exists("./upgrade_tmp"))
+            if (Directory.Exists("./upgrade_tmp"))
             {
-                Directory.CreateDirectory("./upgrade_tmp");
+                Directory.Delete("./upgrade_tmp", true);
             }
+
+            Directory.CreateDirectory("./upgrade_tmp");
 
             FileStream fs = new FileStream("upgrade_done", FileMode.Create);
             StreamWriter sw = new StreamWriter(fs);
 
             foreach (ReleaseFile releaseFile in upgradeInfo.releaseFiles)
             {
-                String destTmp = "./upgrade_tmp/" + releaseFile.name;
+                String destTmp = "./upgrade_tmp/" + releaseFile.dest;
 
                 Logger.getLogger().info("start to download file :" + releaseFile.ToString() + " to " + destTmp);
 
@@ -57,6 +59,8 @@ namespace Updater
                 sw.WriteLine(releaseFile.dest);
             }
 
+            sw.Flush();
+            sw.Close();
             fs.Close();
             Logger.getLogger().info("upgrade self done");
 
