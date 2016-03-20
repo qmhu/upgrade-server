@@ -3,7 +3,6 @@ package com.my.controller;
 import com.my.model.FileUploadForm;
 import com.my.model.UpgradeInfo;
 import com.my.service.UpgradeService;
-import io.swagger.annotations.Api;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +20,6 @@ import java.util.List;
 /**
  * Handles requests for the Upgrade service.
  */
-@Api(value = "/upgrade")
 @Controller
 public class UpgradeController {
 

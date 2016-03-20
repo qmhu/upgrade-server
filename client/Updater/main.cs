@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading;
 using Updater.Model;
 using Updater.Net;
+using Updater.Util;
 
 namespace Updater
 {
@@ -15,7 +16,7 @@ namespace Updater
 
         static void Main(string[] args)
         {
-
+            
             if (args.Length < 1)
             {
                 Console.WriteLine("Usage:Updater.exe client|upgrade_client");

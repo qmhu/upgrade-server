@@ -3,7 +3,6 @@ package com.my.controller;
 import com.my.model.FileUploadForm;
 import com.my.model.ReleaseInfo;
 import com.my.service.ReleaseService;
-import io.swagger.annotations.Api;
 import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,7 +22,6 @@ import java.util.List;
 /**
  * Handles requests for the Release service.
  */
-@Api(value = "/release")
 @Controller
 public class ReleaseController {
 
